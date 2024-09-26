@@ -177,11 +177,9 @@ def run():
     for zone in zones:
         for record in zone.get('records'):
             differs = ip_address_differs(record, ip_address)
-            if differs and SHOULD_UPDATE:
+            if differs and not isinstance(differs, RecordTypeNotSupportedError) and SHOULD_UPDATE:
                 logging.info(f"Updating DNS record for {record.name}")
                 update_dns_record(record, ip_address)
-
-            logging.info(f"DNS record for {record.name} is up to date.")
 
 if __name__ == "__main__":
     run()
