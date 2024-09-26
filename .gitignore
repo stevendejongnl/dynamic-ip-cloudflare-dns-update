@@ -1,1 +1,4 @@
 .idea
+.env
+data/zones.json
+data/**/fetched_*.json

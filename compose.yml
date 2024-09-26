@@ -1,0 +1,11 @@
+services:
+  app:
+    image: ghcr.io/stevendejongnl/dynamic-ip-cloudflare-dns-update:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    command: ["./start.sh"]

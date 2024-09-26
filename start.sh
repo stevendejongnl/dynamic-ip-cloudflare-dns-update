@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INTERVAL=300  # 5 minutes
+INTERVAL=3600  # 60 minutes
 
 while true; do
     python main.py
