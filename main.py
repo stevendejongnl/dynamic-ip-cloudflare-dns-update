@@ -11,9 +11,9 @@ import requests
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 CLOUDFLARE_API_KEY = os.environ.get("CLOUDFLARE_API_KEY")
-SHOULD_NOT_UPDATE = bool(os.environ.get("SHOULD_NOT_UPDATE") == 'True')
+SHOULD_UPDATE = bool(os.environ.get("SHOULD_UPDATE") == 'True')
 
-print(f"SHOULD_NOT_UPDATE: {SHOULD_NOT_UPDATE}")
+print(f"SHOULD_UPDATE: {SHOULD_UPDATE}")
 
 CLOUDFLARE_AUTH_HEADERS = {
     "Content-Type": "application/json",
@@ -97,7 +97,6 @@ def get_public_ip():
 
 
 def get_dns_by_zone_id() -> List[Zone]:
-    # check if zones.json exists
     if not os.path.exists("data/zones.json"):
         logging.error("data/zones.json file not found.")
         return []
@@ -171,17 +170,18 @@ def update_dns_record(record: DNSRecord, ip_address: str) -> None:
 
     logging.info(f"Record {data['name']} updated successfully with IP address {data['content']}.")
 
-
-if __name__ == "__main__":
+def run():
     ip_address = get_public_ip()
     zones = get_dns_by_zone_id()
 
     for zone in zones:
         for record in zone.get('records'):
-            if ip_address_differs(record, ip_address):
-                if not SHOULD_NOT_UPDATE:
-                    logging.info(f"Updating DNS record for {record.name}")
-                    update_dns_record(record, ip_address)
-                continue
+            differs = ip_address_differs(record, ip_address)
+            if differs and SHOULD_UPDATE:
+                logging.info(f"Updating DNS record for {record.name}")
+                update_dns_record(record, ip_address)
 
             logging.info(f"DNS record for {record.name} is up to date.")
+
+if __name__ == "__main__":
+    run()
