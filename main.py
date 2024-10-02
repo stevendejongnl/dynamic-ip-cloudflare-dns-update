@@ -58,7 +58,7 @@ class DNSRecord:
     tags: List[str]
     created_on: str
     modified_on: str
-    comment_modified_on: str
+    comment_modified_on: str | None = None
 
     def __str__(self):
         return f"{self.id} {self.name} {self.type} {self.content}"
