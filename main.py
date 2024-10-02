@@ -58,6 +58,7 @@ class DNSRecord:
     tags: List[str]
     created_on: str
     modified_on: str
+    comment_modified_on: str
 
     def __str__(self):
         return f"{self.id} {self.name} {self.type} {self.content}"
@@ -78,7 +79,8 @@ class DNSRecord:
             "comment": self.comment,
             "tags": self.tags,
             "created_on": self.created_on,
-            "modified_on": self.modified_on
+            "modified_on": self.modified_on,
+            "comment_modified_on": self.comment_modified_on
         }
 
 
